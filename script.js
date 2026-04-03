@@ -1,4 +1,4 @@
-// --- FIREBASE CONFIGURATION (Updated with your d6271 credentials) ---
+// --- FIREBASE CONFIGURATION ---
 const firebaseConfig = {
     apiKey: "AIzaSyDYgefl4iE5DMpSliinQcSL4Mb3xeApSWI",
     authDomain: "chanakya-certificates-d6271.firebaseapp.com",
@@ -32,7 +32,7 @@ const formatDate = (ds) => {
     return `${day}${sfx(day)} ${m} ${y}`;
 };
 
-// --- DATA HANDLING ---
+// --- CORE DATA FUNCTIONS ---
 async function addStudent() {
     const n = document.getElementById('name').value;
     const c = document.getElementById('code').value;
@@ -42,6 +42,7 @@ async function addStudent() {
 
     if (!n || !c || !l || !d) return alert("Please fill all fields!");
 
+    // Construct Data Object
     const data = { 
         name: toTitleCase(n), 
         code: `CA${c.padStart(3, '0')}`, 
@@ -55,8 +56,9 @@ async function addStudent() {
     try {
         await db.collection("students").add(data);
         showPreview(data);
-        loadData(); // Refresh history
-        // Clear inputs
+        loadData(); // Refresh the history table
+        
+        // Clear input fields
         document.getElementById('name').value = "";
         document.getElementById('code').value = "";
     } catch (error) {
@@ -81,7 +83,7 @@ function renderTable(data) {
         <tr>
             <td>${s.code}</td>
             <td>${s.name}</td>
-            <td><button onclick="viewRecord('${s.id}')">View</button></td>
+            <td><button onclick="viewRecord('${s.id}')">View / Print</button></td>
         </tr>
     `).join('');
 }
@@ -91,7 +93,6 @@ function viewRecord(id) {
     if (record) showPreview(record);
 }
 
-// --- SEARCH LOGIC ---
 function searchRecords() {
     const term = document.getElementById('searchBox').value.toLowerCase();
     const filtered = records.filter(r => 
@@ -101,43 +102,51 @@ function searchRecords() {
     renderTable(filtered);
 }
 
-// --- CERTIFICATE PREVIEW ---
+// --- CERTIFICATE MODAL LOGIC ---
 function showPreview(s) {
+    // Fill the new design elements
     document.getElementById('c-name').innerText = s.name;
+    document.getElementById('c-sid').innerText = s.code; // MOVED TO BODY
     document.getElementById('c-level').innerText = `${s.level} in ${s.course}`;
     document.getElementById('c-date').innerText = formatDate(s.date);
     document.getElementById('c-id').innerText = s.certId;
-    document.getElementById('c-sid').innerText = s.code;
+    
+    // Show Modal
     document.getElementById('certModal').style.display = 'block';
 }
 
-// --- EXPORT SYSTEM ---
-async function exportCert(type) {
-    const el = document.getElementById('certificate');
-    // Scale 3 ensures high quality (3000px width)
-    const canvas = await html2canvas(el, { scale: 3, useCORS: true });
-    const imgData = canvas.toDataURL('image/jpeg', 1.0);
-    const fileName = document.getElementById('c-name').innerText.replace(/\s+/g, '_');
-
-    if (type === 'jpg') {
-        const a = document.createElement('a'); 
-        a.href = imgData; 
-        a.download = `${fileName}_Certificate.jpg`; 
-        a.click();
-    } else {
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('l', 'mm', 'a4');
-        pdf.addImage(imgData, 'JPEG', 0, 0, 297, 210);
-        pdf.save(`${fileName}_Certificate.pdf`);
-    }
-}
-
-// --- UI HELPERS ---
 function closeModal() { 
     document.getElementById('certModal').style.display = 'none'; 
 }
 
-// Close modal when clicking outside of it
+// --- EXPORT TO JPG / PDF ---
+async function exportCert(type) {
+    const el = document.getElementById('certificate');
+    
+    // High Quality Capture (Scale 3)
+    const canvas = await html2canvas(el, { 
+        scale: 3, 
+        useCORS: true,
+        backgroundColor: "#ffffff" 
+    });
+    
+    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+    const safeName = document.getElementById('c-name').innerText.replace(/\s+/g, '_');
+
+    if (type === 'jpg') {
+        const a = document.createElement('a'); 
+        a.href = imgData; 
+        a.download = `Chanakya_Cert_${safeName}.jpg`; 
+        a.click();
+    } else {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('l', 'mm', 'a4'); // Landscape A4
+        pdf.addImage(imgData, 'JPEG', 0, 0, 297, 210);
+        pdf.save(`Chanakya_Cert_${safeName}.pdf`);
+    }
+}
+
+// Close modal when clicking outside of the content
 window.onclick = function(event) {
     const modal = document.getElementById('certModal');
     if (event.target == modal) {
@@ -145,4 +154,5 @@ window.onclick = function(event) {
     }
 }
 
+// Initial Load
 window.onload = loadData;
