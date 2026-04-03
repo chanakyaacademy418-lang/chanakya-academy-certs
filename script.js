@@ -1,46 +1,107 @@
+// --- FIREBASE CONFIGURATION (Updated with your d6271 credentials) ---
 const firebaseConfig = {
-    apiKey: "AIzaSyBeB6h9G7YwMhDodIPpoZIHaNyDu6-IERs",
-    authDomain: "chanakya-certificates.firebaseapp.com",
-    projectId: "chanakya-certificates",
-    storageBucket: "chanakya-certificates.appspot.com",
-    messagingSenderId: "1020718754886",
-    appId: "1:1020718754886:web:8e02b20b25e526b6cdae47"
+    apiKey: "AIzaSyDYgefl4iE5DMpSliinQcSL4Mb3xeApSWI",
+    authDomain: "chanakya-certificates-d6271.firebaseapp.com",
+    projectId: "chanakya-certificates-d6271",
+    storageBucket: "chanakya-certificates-d6271.firebasestorage.app",
+    messagingSenderId: "1007279855889",
+    appId: "1:1007279855889:web:d40ff37629c48e22ea54b0"
 };
 
-firebase.initializeApp(firebaseConfig);
+// Initialize Firebase (Compatibility Mode)
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const db = firebase.firestore();
 let records = [];
 
+// --- FORMATTING HELPERS ---
 const toTitleCase = (s) => s.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+
 const formatDate = (ds) => {
-    const d = new Date(ds), day = d.getDate();
-    const m = d.toLocaleString('en-GB', { month: 'long' }), y = d.getFullYear();
-    const sfx = (day) => { if (day > 3 && day < 21) return 'th'; switch (day % 10) { case 1: return "st"; case 2: return "nd"; case 3: return "rd"; default: return "th"; } };
+    const d = new Date(ds);
+    const day = d.getDate();
+    const m = d.toLocaleString('en-GB', { month: 'long' });
+    const y = d.getFullYear();
+    const sfx = (n) => { 
+        if (n > 3 && n < 21) return 'th'; 
+        switch (n % 10) { 
+            case 1: return "st"; case 2: return "nd"; case 3: return "rd"; default: return "th"; 
+        } 
+    };
     return `${day}${sfx(day)} ${m} ${y}`;
 };
 
+// --- DATA HANDLING ---
 async function addStudent() {
-    const n = document.getElementById('name').value, c = document.getElementById('code').value;
-    const l = document.getElementById('level').value, cr = document.getElementById('course').value, d = document.getElementById('date').value;
-    if (!n || !c || !l || !d) return alert("Fill all fields");
-    const data = { name: toTitleCase(n), code: `CA${c.padStart(3, '0')}`, level: l, course: cr, date: d, certId: `CERT-2026-${c.padStart(3, '0')}`, ts: Date.now() };
-    await db.collection("students").add(data);
-    showPreview(data);
-    loadData();
+    const n = document.getElementById('name').value;
+    const c = document.getElementById('code').value;
+    const l = document.getElementById('level').value;
+    const cr = document.getElementById('course').value;
+    const d = document.getElementById('date').value;
+
+    if (!n || !c || !l || !d) return alert("Please fill all fields!");
+
+    const data = { 
+        name: toTitleCase(n), 
+        code: `CA${c.padStart(3, '0')}`, 
+        level: l, 
+        course: cr, 
+        date: d, 
+        certId: `CERT-2026-${c.padStart(3, '0')}`, 
+        ts: Date.now() 
+    };
+
+    try {
+        await db.collection("students").add(data);
+        showPreview(data);
+        loadData(); // Refresh history
+        // Clear inputs
+        document.getElementById('name').value = "";
+        document.getElementById('code').value = "";
+    } catch (error) {
+        console.error("Error adding student: ", error);
+        alert("Failed to save. Check your Firebase Rules!");
+    }
 }
 
 async function loadData() {
-    const snap = await db.collection("students").orderBy("ts", "desc").get();
-    records = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    renderTable(records);
+    try {
+        const snap = await db.collection("students").orderBy("ts", "desc").get();
+        records = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderTable(records);
+    } catch (error) {
+        console.error("Error loading history: ", error);
+    }
 }
 
 function renderTable(data) {
-    document.getElementById('historyBody').innerHTML = data.map(s => `<tr><td>${s.code}</td><td>${s.name}</td><td><button onclick="viewRecord('${s.id}')">View</button></td></tr>`).join('');
+    const body = document.getElementById('historyBody');
+    body.innerHTML = data.map(s => `
+        <tr>
+            <td>${s.code}</td>
+            <td>${s.name}</td>
+            <td><button onclick="viewRecord('${s.id}')">View</button></td>
+        </tr>
+    `).join('');
 }
 
-function viewRecord(id) { showPreview(records.find(r => r.id === id)); }
+function viewRecord(id) { 
+    const record = records.find(r => r.id === id);
+    if (record) showPreview(record);
+}
 
+// --- SEARCH LOGIC ---
+function searchRecords() {
+    const term = document.getElementById('searchBox').value.toLowerCase();
+    const filtered = records.filter(r => 
+        r.name.toLowerCase().includes(term) || 
+        r.code.toLowerCase().includes(term)
+    );
+    renderTable(filtered);
+}
+
+// --- CERTIFICATE PREVIEW ---
 function showPreview(s) {
     document.getElementById('c-name').innerText = s.name;
     document.getElementById('c-level').innerText = `${s.level} in ${s.course}`;
@@ -50,18 +111,38 @@ function showPreview(s) {
     document.getElementById('certModal').style.display = 'block';
 }
 
+// --- EXPORT SYSTEM ---
 async function exportCert(type) {
     const el = document.getElementById('certificate');
-    const canvas = await html2canvas(el, { scale: 3 });
-    const img = canvas.toDataURL('image/jpeg', 1.0);
+    // Scale 3 ensures high quality (3000px width)
+    const canvas = await html2canvas(el, { scale: 3, useCORS: true });
+    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+    const fileName = document.getElementById('c-name').innerText.replace(/\s+/g, '_');
+
     if (type === 'jpg') {
-        const a = document.createElement('a'); a.href = img; a.download = 'Cert.jpg'; a.click();
+        const a = document.createElement('a'); 
+        a.href = imgData; 
+        a.download = `${fileName}_Certificate.jpg`; 
+        a.click();
     } else {
-        const pdf = new jspdf.jsPDF('l', 'mm', 'a4');
-        pdf.addImage(img, 'JPEG', 0, 0, 297, 210);
-        pdf.save('Cert.pdf');
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('l', 'mm', 'a4');
+        pdf.addImage(imgData, 'JPEG', 0, 0, 297, 210);
+        pdf.save(`${fileName}_Certificate.pdf`);
     }
 }
 
-function closeModal() { document.getElementById('certModal').style.display = 'none'; }
+// --- UI HELPERS ---
+function closeModal() { 
+    document.getElementById('certModal').style.display = 'none'; 
+}
+
+// Close modal when clicking outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById('certModal');
+    if (event.target == modal) {
+        closeModal();
+    }
+}
+
 window.onload = loadData;
