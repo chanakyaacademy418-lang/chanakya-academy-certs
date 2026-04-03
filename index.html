@@ -66,57 +66,65 @@
     </div>
 </div>
 
-<div id="certModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div id="capture-area">
-            <div id="certificate" class="cert-container">
-                <div class="border-gold-thick"></div>
-                <div class="border-gold-thin"></div>
-                <div class="swoosh top-left"><div class="navy"></div><div class="gold"></div></div>
-                <div class="swoosh bottom-right"><div class="navy"></div><div class="gold"></div></div>
+<div id="capture-area">
+    <div id="certificate" class="modern-cert">
+        <!-- CSS-ONLY GRAPHICS -->
+        <div class="shape top-left-navy"></div>
+        <div class="shape top-left-gold"></div>
+        <div class="shape bottom-right-navy"></div>
+        <div class="shape bottom-right-gold"></div>
+        
+        <div class="outer-border"></div>
+        <div class="inner-border"></div>
 
-                <div class="cert-inner">
-                    <div class="logo-box"><div class="logo-circle">🎓</div></div>
-                    <h1 class="academy-name">CHANAKYA ACADEMY</h1>
-                    <p class="academy-sub">Abacus & Vedic Maths Classes</p>
-                    <div class="motto-line">“THE BRAIN GYM!”</div>
-                    
-                    <h2 class="cert-title">CERTIFICATE <span>of</span> ACHIEVEMENT</h2>
-                    
-                    <p class="label-text">This is to certify that</p>
-                    <h3 id="c-name" class="name-text">Student Name</h3>
-                    <p class="label-text">has successfully completed</p>
-                    <h4 id="c-level" class="level-text">Level 1 in Abacus</h4>
-                    <p class="date-text">dated on <span id="c-date">10th April 2026</span></p>
+        <div class="content">
+            <!-- Header -->
+            <div class="header">
+                <h1 class="academy-name">CHANAKYA ACADEMY</h1>
+                <p class="sub-text">Abacus & Vedic Maths Classes</p>
+                <div class="motto-line">"THE BRAIN GYM!"</div>
+            </div>
 
-                    <div class="footer-row">
-                        <div class="seal-wrap">
-                            <div class="ribbon-l"></div><div class="ribbon-r"></div>
-                            <div class="gold-seal"><div class="seal-dots"></div></div>
-                        </div>
-                        <div class="sig-wrap">
-                            <p class="sig-name">Archana Kakde</p>
-                            <div class="sig-line"></div>
-                            <p class="sig-label">Director</p>
-                        </div>
-                    </div>
+            <!-- Title -->
+            <div class="title-wrap">
+                <h2 class="cert-title">CERTIFICATE <span>of</span> ACHIEVEMENT</h2>
+            </div>
 
-                    <div class="id-footer">
-                        <span>Certificate ID: <b id="c-id">CERT-2026-001</b></span>
-                        <span>Student ID: <b id="c-sid">CA001</b></span>
-                    </div>
+            <!-- Body -->
+            <div class="body-text">
+                <p>This is to certify that</p>
+                <h3 id="c-name" class="student-name">RAHUL SHARMA</h3>
+                
+                <!-- MOVED STUDENT ID TO BODY -->
+                <p class="student-code-body">Student ID: <span id="c-sid">ABX-10293</span></p>
+                
+                <p class="complete-text">has successfully completed</p>
+                <h4 id="c-level" class="level-text">Foundation Level 1 in Abacus</h4>
+                <p class="date-text">dated on <span id="c-date">10 April 2026</span></p>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <div class="seal-box">
+                    <div class="css-seal"></div>
+                    <div class="seal-ribbon-1"></div>
+                    <div class="seal-ribbon-2"></div>
+                </div>
+                <div class="sig-box">
+                    <p class="sig-font">Archana Kakde</p>
+                    <div class="sig-line"></div>
+                    <p class="sig-label">Director</p>
                 </div>
             </div>
-        </div>
-        <div class="modal-btns">
-            <button onclick="exportCert('pdf')" class="btn-pdf">Download PDF</button>
-            <button onclick="exportCert('jpg')" class="btn-jpg">Download JPG</button>
+
+            <div class="cert-id-footer">
+                Certificate ID: <span id="c-id">CERT-2026-00123</span>
+            </div>
         </div>
     </div>
 </div>
 
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
                           </html>
 
