@@ -1,44 +1,227 @@
-:root { --navy: #0d2b52; --gold: #c5a021; --cream: #fffdf7; }
-body { font-family: sans-serif; background: #f4f4f9; margin: 0; }
-header { background: var(--navy); color: white; text-align: center; padding: 30px; border-bottom: 5px solid var(--gold); }
-.container { max-width: 1100px; margin: 20px auto; padding: 0 20px; }
-.main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 5px; border: 1px solid #ddd; }
-.id-input { display: flex; align-items: center; background: #eee; border-radius: 5px; overflow: hidden; }
-.id-input span { padding: 0 15px; font-weight: bold; }
-.btn-primary { background: var(--navy); color: white; border: none; font-weight: bold; cursor: pointer; }
+/* --- PREMIUM COLOR PALETTE --- */
+:root {
+    --navy-deep: #0a1d37;
+    --navy-light: #0d2b52;
+    --gold-metallic: #c5a021;
+    --gold-soft: #e2c275;
+    --paper-white: #ffffff;
+    --text-gray: #444444;
+}
 
-/* Certificate Design */
-.cert-container { width: 1000px; height: 707px; background: var(--cream); position: relative; overflow: hidden; color: var(--navy); }
-.border-gold-thick { position: absolute; inset: 20px; border: 3px solid var(--gold); }
-.border-gold-thin { position: absolute; inset: 30px; border: 1px solid var(--gold); }
+/* --- RESET & CANVAS --- */
+body { 
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+    background: #f0f2f5; 
+    margin: 0; 
+}
 
-.swoosh { position: absolute; width: 320px; height: 320px; z-index: 5; }
-.top-left { top: -40px; left: -40px; }
-.bottom-right { bottom: -40px; right: -40px; transform: rotate(180deg); }
-.navy { position: absolute; width: 100%; height: 100%; background: var(--navy); clip-path: ellipse(75% 55% at 0% 0%); }
-.gold { position: absolute; width: 105%; height: 105%; background: var(--gold); clip-path: ellipse(77% 57% at 0% 0%); z-index: -1; }
+/* A4 Landscape Ratio (1000x707) */
+.cert-container {
+    width: 1000px;
+    height: 707px;
+    background: var(--paper-white);
+    position: relative;
+    overflow: hidden;
+    color: var(--navy-deep);
+    margin: 20px auto;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    border: 1px solid #ddd;
+}
 
-.cert-inner { position: relative; z-index: 10; padding: 60px; height: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
-.academy-name { font-family: serif; font-size: 52px; margin: 0; font-weight: 900; }
-.motto-line { border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); padding: 5px 30px; color: var(--gold); font-weight: bold; font-size: 14px; margin-top: 10px; }
-.cert-title { font-size: 38px; color: var(--gold); margin: 30px 0; letter-spacing: 3px; }
-.cert-title span { font-family: serif; font-style: italic; text-transform: lowercase; font-size: 26px; }
-.name-text { font-family: serif; font-size: 65px; margin: 15px 0; border-bottom: 1px solid #ddd; }
-.level-text { font-size: 30px; font-weight: bold; margin: 10px 0; }
+/* --- THE SIGNATURE SWOOSHES (Reference Image Style) --- */
+.swoosh { 
+    position: absolute; 
+    width: 450px; 
+    height: 450px; 
+    z-index: 2; 
+}
 
-.footer-row { display: flex; justify-content: space-between; width: 100%; margin-top: auto; padding-bottom: 30px; }
-.gold-seal { width: 90px; height: 90px; background: radial-gradient(circle, #fceabb, #c5a021); border-radius: 50%; border: 2px solid #8c6d05; position: relative; display: flex; align-items: center; justify-content: center; }
-.seal-dots { width: 75px; height: 75px; border: 1px dashed white; border-radius: 50%; }
-.ribbon-l, .ribbon-r { position: absolute; width: 30px; height: 55px; background: #b18c4b; top: 60px; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%); z-index: -1; }
-.ribbon-l { left: 10px; transform: rotate(15deg); } .ribbon-r { right: 10px; transform: rotate(-15deg); }
+/* Top Left Curve */
+.top-left { top: -80px; left: -80px; }
+/* Bottom Right Curve (Flipped) */
+.bottom-right { bottom: -80px; right: -80px; transform: rotate(180deg); }
 
-.sig-name { font-family: cursive; font-size: 38px; margin: 0; }
-.sig-line { width: 220px; height: 1px; background: var(--navy); margin: 5px auto; }
-.id-footer { width: 100%; display: flex; justify-content: space-between; font-size: 12px; border-top: 1px solid #eee; padding-top: 10px; }
+.navy-shape { 
+    position: absolute; width: 100%; height: 100%; 
+    background: var(--navy-deep); 
+    clip-path: ellipse(75% 55% at 0% 0%); 
+}
 
-.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; padding: 20px; overflow-y: auto; }
-.modal-content { background: white; width: 1050px; margin: auto; padding: 20px; border-radius: 10px; }
-.modal-btns { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+.gold-accent { 
+    position: absolute; width: 105%; height: 105%; 
+    background: var(--gold-metallic); 
+    clip-path: ellipse(77% 57% at 0% 0%); 
+    z-index: -1; 
+}
 
+/* --- BORDER SYSTEM --- */
+.border-outer {
+    position: absolute;
+    inset: 25px;
+    border: 3px solid var(--gold-metallic);
+    z-index: 1;
+}
+
+.border-inner {
+    position: absolute;
+    inset: 35px;
+    border: 1px solid var(--gold-metallic);
+    z-index: 1;
+}
+
+/* --- MAIN CONTENT AREA --- */
+.cert-inner { 
+    position: relative; 
+    z-index: 10; 
+    padding: 80px; 
+    height: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Header Section */
+.academy-name { 
+    font-family: 'Times New Roman', Times, serif; 
+    font-size: 62px; 
+    margin: 0; 
+    font-weight: 900; 
+    letter-spacing: 2px;
+    color: var(--navy-deep);
+    text-transform: uppercase;
+}
+
+.academy-sub { 
+    font-size: 20px; 
+    margin: 5px 0; 
+    color: var(--text-gray); 
+    font-weight: 600; 
+    letter-spacing: 1px;
+}
+
+.motto-box {
+    background: var(--navy-deep);
+    color: var(--gold-soft);
+    padding: 5px 30px;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 4px;
+    margin-top: 15px;
+    border-radius: 2px;
+}
+
+/* Title Section */
+.cert-main-title { 
+    font-size: 48px; 
+    color: var(--gold-metallic); 
+    margin: 45px 0 10px; 
+    letter-spacing: 6px; 
+    font-weight: 800;
+}
+
+.cert-main-title span { 
+    font-family: 'Georgia', serif; 
+    font-style: italic; 
+    text-transform: lowercase; 
+    font-size: 30px; 
+    color: var(--navy-deep);
+    letter-spacing: 0;
+}
+
+.intro-text { 
+    font-size: 22px; 
+    color: var(--text-gray); 
+    margin: 10px 0; 
+}
+
+/* --- DYNAMIC DATA STYLING --- */
+.student-name { 
+    font-family: 'Georgia', serif; 
+    font-size: 78px; 
+    margin: 15px 0; 
+    font-weight: 500;
+    color: var(--navy-deep);
+    border-bottom: 2px solid #f0f0f0;
+    min-width: 70%;
+    display: inline-block;
+}
+
+.achievement-text { 
+    font-size: 34px; 
+    font-weight: 700; 
+    margin: 15px 0; 
+    color: var(--navy-light); 
+}
+
+.date-text { 
+    font-size: 18px; 
+    font-style: italic; 
+    color: #555; 
+    margin-bottom: 20px;
+}
+
+/* --- FOOTER ELEMENTS --- */
+.footer-container { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-end;
+    width: 100%; 
+    margin-top: auto; 
+    padding: 0 40px 30px;
+    box-sizing: border-box;
+}
+
+/* The Official Seal */
+.seal-container { position: relative; width: 130px; height: 130px; }
+.gold-medal { 
+    width: 110px; height: 110px; 
+    background: radial-gradient(circle, #f8e5ad, #c5a021); 
+    border-radius: 50%; 
+    border: 3px solid #b38f1a; 
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 5;
+}
+.medal-inner { 
+    width: 90px; height: 90px; 
+    border: 1px dashed rgba(255,255,255,0.8); 
+    border-radius: 50%; 
+}
+
+/* Signature Section */
+.signature-section { text-align: center; }
+.signature-image { 
+    font-family: 'Brush Script MT', cursive; 
+    font-size: 48px; 
+    margin: 0; 
+    color: var(--navy-deep); 
+}
+.signature-line { 
+    width: 250px; 
+    height: 2px; 
+    background: var(--navy-deep); 
+    margin: 5px auto; 
+}
+.signature-label { 
+    font-weight: 800; 
+    font-size: 15px; 
+    text-transform: uppercase; 
+    color: var(--gold-metallic); 
+    letter-spacing: 2px;
+}
+
+/* Bottom Meta Info */
+.id-bar { 
+    position: absolute;
+    bottom: 10px;
+    width: 85%;
+    display: flex; 
+    justify-content: space-between; 
+    font-size: 11px; 
+    color: #999;
+    border-top: 1px solid #f5f5f5;
+    padding-top: 5px;
+  }
+  
