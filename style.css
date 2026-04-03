@@ -1,0 +1,44 @@
+:root { --navy: #0d2b52; --gold: #c5a021; --cream: #fffdf7; }
+body { font-family: sans-serif; background: #f4f4f9; margin: 0; }
+header { background: var(--navy); color: white; text-align: center; padding: 30px; border-bottom: 5px solid var(--gold); }
+.container { max-width: 1100px; margin: 20px auto; padding: 0 20px; }
+.main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 5px; border: 1px solid #ddd; }
+.id-input { display: flex; align-items: center; background: #eee; border-radius: 5px; overflow: hidden; }
+.id-input span { padding: 0 15px; font-weight: bold; }
+.btn-primary { background: var(--navy); color: white; border: none; font-weight: bold; cursor: pointer; }
+
+/* Certificate Design */
+.cert-container { width: 1000px; height: 707px; background: var(--cream); position: relative; overflow: hidden; color: var(--navy); }
+.border-gold-thick { position: absolute; inset: 20px; border: 3px solid var(--gold); }
+.border-gold-thin { position: absolute; inset: 30px; border: 1px solid var(--gold); }
+
+.swoosh { position: absolute; width: 320px; height: 320px; z-index: 5; }
+.top-left { top: -40px; left: -40px; }
+.bottom-right { bottom: -40px; right: -40px; transform: rotate(180deg); }
+.navy { position: absolute; width: 100%; height: 100%; background: var(--navy); clip-path: ellipse(75% 55% at 0% 0%); }
+.gold { position: absolute; width: 105%; height: 105%; background: var(--gold); clip-path: ellipse(77% 57% at 0% 0%); z-index: -1; }
+
+.cert-inner { position: relative; z-index: 10; padding: 60px; height: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.academy-name { font-family: serif; font-size: 52px; margin: 0; font-weight: 900; }
+.motto-line { border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); padding: 5px 30px; color: var(--gold); font-weight: bold; font-size: 14px; margin-top: 10px; }
+.cert-title { font-size: 38px; color: var(--gold); margin: 30px 0; letter-spacing: 3px; }
+.cert-title span { font-family: serif; font-style: italic; text-transform: lowercase; font-size: 26px; }
+.name-text { font-family: serif; font-size: 65px; margin: 15px 0; border-bottom: 1px solid #ddd; }
+.level-text { font-size: 30px; font-weight: bold; margin: 10px 0; }
+
+.footer-row { display: flex; justify-content: space-between; width: 100%; margin-top: auto; padding-bottom: 30px; }
+.gold-seal { width: 90px; height: 90px; background: radial-gradient(circle, #fceabb, #c5a021); border-radius: 50%; border: 2px solid #8c6d05; position: relative; display: flex; align-items: center; justify-content: center; }
+.seal-dots { width: 75px; height: 75px; border: 1px dashed white; border-radius: 50%; }
+.ribbon-l, .ribbon-r { position: absolute; width: 30px; height: 55px; background: #b18c4b; top: 60px; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%); z-index: -1; }
+.ribbon-l { left: 10px; transform: rotate(15deg); } .ribbon-r { right: 10px; transform: rotate(-15deg); }
+
+.sig-name { font-family: cursive; font-size: 38px; margin: 0; }
+.sig-line { width: 220px; height: 1px; background: var(--navy); margin: 5px auto; }
+.id-footer { width: 100%; display: flex; justify-content: space-between; font-size: 12px; border-top: 1px solid #eee; padding-top: 10px; }
+
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; padding: 20px; overflow-y: auto; }
+.modal-content { background: white; width: 1050px; margin: auto; padding: 20px; border-radius: 10px; }
+.modal-btns { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+
