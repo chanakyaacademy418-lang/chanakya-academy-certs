@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chanakya Academy | Certificate System</title>
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+<div class="app-container">
+    <header class="main-header">
+        <h1>CHANAKYA ACADEMY</h1>
+        <p>Official Certificate Generation Portal</p>
+    </header>
+
+    <div class="grid-layout">
+        <!-- Manual Entry Section -->
+        <section class="card">
+            <h2>📝 Manual Entry</h2>
+            <div class="form-group">
+                <input type="text" id="name" placeholder="Student Full Name (e.g. nandini kakade)">
+                <div class="id-input">
+                    <span>CA</span>
+                    <input type="number" id="code" placeholder="001">
+                </div>
+                <select id="level">
+                    <option value="" disabled selected>Select Level</option>
+                    <option value="Foundation Level">Foundation Level</option>
+                    <script>for(let i=1;i<=8;i++) document.write(`<option value="Level ${i}">Level ${i}</option>`)</script>
+                </select>
+                <select id="course">
+                    <option value="Abacus">Abacus</option>
+                    <option value="Vedic Maths">Vedic Maths</option>
+                </select>
+                <input type="date" id="date">
+                <button onclick="addStudent()" class="btn-save">Add & Save Student</button>
+            </div>
+            <hr>
+            <div class="excel-zone">
+                <p>Bulk Upload (.xlsx)</p>
+                <input type="file" id="excel-file" accept=".xlsx">
+            </div>
+        </section>
+
+        <!-- Search & History Section -->
+        <section class="card">
+            <h2>🔍 Search Records</h2>
+            <input type="text" id="searchBox" oninput="searchData()" placeholder="Search Name or Student ID..." class="search-bar">
+            <div id="list" class="data-list"></div>
+        </section>
+    </div>
+
+    <!-- Hidden Canvas for High-Res Rendering -->
+    <canvas id="certCanvas" style="display:none;"></canvas>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="preview-container"></div>
+            <div class="modal-btns">
+                <button onclick="download('jpg')" class="btn-jpg">Download JPG</button>
+                <button onclick="download('pdf')" class="btn-pdf">Download PDF (Print)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
