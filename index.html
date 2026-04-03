@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chanakya Academy | Certificate System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>CHANAKYA ACADEMY</h1>
+    <p>Premium Certificate Generator</p>
+</header>
+
+<div class="container">
+    <div class="main-grid">
+        <section class="card">
+            <h2>📝 Manual Entry</h2>
+            <div class="form-group">
+                <input type="text" id="name" placeholder="Student Full Name">
+                <div class="id-input">
+                    <span>CA</span>
+                    <input type="number" id="code" placeholder="001">
+                </div>
+                <select id="level">
+                    <option value="" disabled selected>Select Level</option>
+                    <option value="Foundation Level">Foundation Level</option>
+                    <option value="Level 1">Level 1</option><option value="Level 2">Level 2</option>
+                    <option value="Level 3">Level 3</option><option value="Level 4">Level 4</option>
+                    <option value="Level 5">Level 5</option><option value="Level 6">Level 6</option>
+                    <option value="Level 7">Level 7</option><option value="Level 8">Level 8</option>
+                </select>
+                <select id="course">
+                    <option value="Abacus">Abacus</option>
+                    <option value="Vedic Maths">Vedic Maths</option>
+                </select>
+                <input type="date" id="date">
+                <button onclick="addStudent()" class="btn-primary">Generate & Save</button>
+            </div>
+            <hr>
+            <div class="excel-upload">
+                <p>Batch Upload (.xlsx)</p>
+                <input type="file" id="excelFile" accept=".xlsx" hidden>
+                <button onclick="document.getElementById('excelFile').click()" class="btn-secondary">Upload Excel</button>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>🔍 History & Search</h2>
+            <input type="text" id="searchBox" placeholder="Search name or ID..." oninput="searchRecords()">
+            <div class="list-wrapper">
+                <table id="historyTable">
+                    <thead>
+                        <tr><th>ID</th><th>Name</th><th>Action</th></tr>
+                    </thead>
+                    <tbody id="historyBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div id="certModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="capture-area">
+            <div id="certificate" class="cert-container">
+                <div class="border-gold-thick"></div>
+                <div class="border-gold-thin"></div>
+                <div class="swoosh top-left"><div class="navy"></div><div class="gold"></div></div>
+                <div class="swoosh bottom-right"><div class="navy"></div><div class="gold"></div></div>
+
+                <div class="cert-inner">
+                    <div class="logo-box"><div class="logo-circle">🎓</div></div>
+                    <h1 class="academy-name">CHANAKYA ACADEMY</h1>
+                    <p class="academy-sub">Abacus & Vedic Maths Classes</p>
+                    <div class="motto-line">“THE BRAIN GYM!”</div>
+                    
+                    <h2 class="cert-title">CERTIFICATE <span>of</span> ACHIEVEMENT</h2>
+                    
+                    <p class="label-text">This is to certify that</p>
+                    <h3 id="c-name" class="name-text">Student Name</h3>
+                    <p class="label-text">has successfully completed</p>
+                    <h4 id="c-level" class="level-text">Level 1 in Abacus</h4>
+                    <p class="date-text">dated on <span id="c-date">10th April 2026</span></p>
+
+                    <div class="footer-row">
+                        <div class="seal-wrap">
+                            <div class="ribbon-l"></div><div class="ribbon-r"></div>
+                            <div class="gold-seal"><div class="seal-dots"></div></div>
+                        </div>
+                        <div class="sig-wrap">
+                            <p class="sig-name">Archana Kakde</p>
+                            <div class="sig-line"></div>
+                            <p class="sig-label">Director</p>
+                        </div>
+                    </div>
+
+                    <div class="id-footer">
+                        <span>Certificate ID: <b id="c-id">CERT-2026-001</b></span>
+                        <span>Student ID: <b id="c-sid">CA001</b></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-btns">
+            <button onclick="exportCert('pdf')" class="btn-pdf">Download PDF</button>
+            <button onclick="exportCert('jpg')" class="btn-jpg">Download JPG</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+                          </html>
+
