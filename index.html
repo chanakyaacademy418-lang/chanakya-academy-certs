@@ -142,6 +142,157 @@
 
       <!-- Parsed list -->
       <div id="excel-parsed-area" style="display:none;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chanakya Academy – Certificate Generator</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Firebase v8 compat -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <!-- SheetJS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <!-- html2canvas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-logo-area">
+      <img src="logo.png" alt="Chanakya Academy Logo" class="header-logo" onerror="this.style.display='none'" />
+      <div class="header-text">
+        <h1 class="header-title">Chanakya Academy</h1>
+        <p class="header-sub">Abacus &amp; Vedic Maths Classes &nbsp;|&nbsp; <em>"The Brain Gym!"</em></p>
+      </div>
+    </div>
+    <div class="header-badge">Certificate System</div>
+  </div>
+</header>
+
+<!-- ===== NAV TABS ===== -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="manual">✏️ Manual Entry</button>
+  <button class="tab-btn" data-tab="excel">📊 Excel Upload</button>
+  <button class="tab-btn" data-tab="history">🗂 View History</button>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main-content">
+
+  <!-- ─── TAB 1: MANUAL ENTRY ─── -->
+  <section id="tab-manual" class="tab-section active">
+    <div class="section-grid">
+
+      <!-- Form Card -->
+      <div class="card form-card">
+        <h2 class="card-title">Add Student</h2>
+
+        <div class="form-group">
+          <label>Student Full Name</label>
+          <input type="text" id="m-name" placeholder="e.g. nandini kakade" autocomplete="off" />
+        </div>
+
+        <div class="form-group code-group">
+          <label>Student Code</label>
+          <div class="code-input-wrap">
+            <span class="code-prefix">CA</span>
+            <input type="number" id="m-code-num" placeholder="001" min="1" max="999" />
+          </div>
+          <small class="hint">Enter digits only. CA prefix is fixed.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Level</label>
+          <select id="m-level">
+            <option value="" disabled selected>Select Level</option>
+            <option value="Foundation Level">Foundation Level</option>
+            <option value="Level 1">Level 1</option>
+            <option value="Level 2">Level 2</option>
+            <option value="Level 3">Level 3</option>
+            <option value="Level 4">Level 4</option>
+            <option value="Level 5">Level 5</option>
+            <option value="Level 6">Level 6</option>
+            <option value="Level 7">Level 7</option>
+            <option value="Level 8">Level 8</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Course</label>
+          <select id="m-course">
+            <option value="Abacus">Abacus</option>
+            <option value="Vedic Maths">Vedic Maths</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Marks (%)</label>
+          <input type="number" id="m-marks" placeholder="e.g. 95" min="0" max="100" />
+        </div>
+
+        <div class="form-group">
+          <label>Issue Date</label>
+          <input type="date" id="m-date" />
+        </div>
+
+        <button class="btn-primary" onclick="App.manualAdd()">
+          <span>➕</span> Add &amp; Save Student
+        </button>
+      </div>
+
+      <!-- Preview Card -->
+      <div class="card preview-card" id="manual-preview-card">
+        <h2 class="card-title">Certificate Preview</h2>
+        <div class="preview-placeholder" id="manual-placeholder">
+          <div class="placeholder-icon">📜</div>
+          <p>Fill the form and click<br/><strong>Add &amp; Save Student</strong><br/>to see the preview</p>
+        </div>
+        <div id="manual-cert-wrap" class="cert-scale-wrap" style="display:none;">
+          <!-- certificate injected here -->
+        </div>
+        <div id="manual-dl-btns" class="dl-btn-group" style="display:none;">
+          <button class="btn-dl-pdf" onclick="App.downloadManual('pdf')">📄 Download PDF</button>
+          <button class="btn-dl-jpg" onclick="App.downloadManual('jpg')">🖼 Download JPG</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── TAB 2: EXCEL UPLOAD ─── -->
+  <section id="tab-excel" class="tab-section">
+    <div class="card excel-card">
+      <h2 class="card-title">Upload Excel File</h2>
+      <p class="hint-text">Columns: <strong>Name, Code, Level, Course, Marks, Date</strong></p>
+
+      <!-- Visible file input — works on all browsers and mobile -->
+      <input type="file" id="excel-file" accept=".xlsx,.xls"
+             style="display:block;width:100%;padding:11px 14px;border:1.5px solid #d1d5db;
+                    border-radius:8px;font-size:15px;background:#fafbff;margin-bottom:12px;
+                    cursor:pointer;"
+             onchange="App.parseExcel(event)" />
+
+      <div class="upload-zone" id="upload-zone">
+        <div class="upload-icon">📁</div>
+        <p>Or drag &amp; drop your .xlsx file here</p>
+        <p style="font-size:12px;margin-top:6px;color:#9ca3af;">Accepted formats: .xlsx, .xls</p>
+      </div>
+
+      <!-- Parsed list -->
+      <div id="excel-parsed-area" style="display:none;">
         <div class="excel-toolbar">
           <label class="select-all-wrap">
             <input type="checkbox" id="select-all-chk" onchange="App.toggleSelectAll()" />
@@ -165,8 +316,8 @@
       <h2 class="card-title">Preview</h2>
       <div id="excel-cert-wrap" class="cert-scale-wrap"></div>
       <div class="dl-btn-group">
-        <button class="btn-dl-pdf" onclick="App.downloadCert('excel-cert','pdf')">📄 PDF</button>
-        <button class="btn-dl-jpg" onclick="App.downloadCert('excel-cert','jpg')">🖼 JPG</button>
+        <button class="btn-dl-pdf" onclick="dlFromWrap('excel-cert-wrap','pdf')">📄 PDF</button>
+        <button class="btn-dl-jpg" onclick="dlFromWrap('excel-cert-wrap','jpg')">🖼 JPG</button>
       </div>
     </div>
   </section>
@@ -190,8 +341,8 @@
       <h2 class="card-title">Certificate Preview</h2>
       <div id="history-cert-wrap" class="cert-scale-wrap"></div>
       <div class="dl-btn-group">
-        <button class="btn-dl-pdf" onclick="App.downloadCert('history-cert','pdf')">📄 Download PDF</button>
-        <button class="btn-dl-jpg" onclick="App.downloadCert('history-cert','jpg')">🖼 Download JPG</button>
+        <button class="btn-dl-pdf" onclick="App.downloadHistory('pdf')">📄 Download PDF</button>
+        <button class="btn-dl-jpg" onclick="App.downloadHistory('jpg')">🖼 Download JPG</button>
       </div>
     </div>
   </section>
